@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex justify-center items-center h-screen bg-gray-100">
+
+  <div class="bg-white w-80 rounded-xl shadow-lg p-5 relative">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Emergency" class="w-12 h-12 rounded-lg">
+      <span id="heart" class="text-2xl cursor-pointer text-gray-400">♡</span>
+    </div>
+
+    <!-- Title -->
+    <h2 class="mt-3 text-lg font-bold">জাতীয় জরুরি সেবা</h2>
+    <p class="text-sm text-gray-500">National Emergency</p>
+
+    <!-- Number -->
+    <div class="mt-4 text-2xl font-bold">999</div>
+
+    <!-- Badge -->
+    <span class="inline-block mt-2 px-3 py-1 text-xs bg-gray-100 rounded-full text-gray-700">
+      সর্বজনীন
+    </span>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-4">
+      <button onclick="copyNumber()" class="flex-1 border border-gray-300 rounded-lg py-2 font-semibold text-gray-600 hover:bg-gray-100">
+        Copy
+      </button>
+      <a href="tel:999" class="flex-1 bg-green-500 text-white rounded-lg py-2 font-semibold hover:bg-green-600 text-center">
+        📞 Call
+      </a>
+    </div>
+  </div>
+
+  <!-- Toast Message -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg">
+    Number copied: 999
+  </div>
+
+  <script>
+    const heart = document.getElementById("heart");
+    const toast = document.getElementById("toast");
+
+    // Heart toggle
+    heart.addEventListener("click", () => {
+      if (heart.textContent === "♡") {
+        heart.textContent = "❤️";
+        heart.classList.remove("text-gray-400");
+        heart.classList.add("text-red-500");
+      } else {
+        heart.textContent = "♡";
+        heart.classList.remove("text-red-500");
+        heart.classList.add("text-gray-400");
+      }
+    });
+
+    // Copy function with toast
+    function copyNumber() {
+      navigator.clipboard.writeText("999");
+      toast.classList.remove("hidden");
+      setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
