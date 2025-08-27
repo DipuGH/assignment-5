@@ -1,74 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emergency Card</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Call History</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex justify-center items-center h-screen bg-gray-100">
-
-  <div class="bg-white w-80 rounded-xl shadow-lg p-5 relative">
+<body class="bg-gray-100 min-h-screen flex items-start justify-center p-6">
+  <div class="w-full max-w-xs">
+    
     <!-- Header -->
-    <div class="flex justify-between items-center">
-      <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Emergency" class="w-12 h-12 rounded-lg">
-      <span id="heart" class="text-2xl cursor-pointer text-gray-400">♡</span>
-    </div>
-
-    <!-- Title -->
-    <h2 class="mt-3 text-lg font-bold">জাতীয় জরুরি সেবা</h2>
-    <p class="text-sm text-gray-500">National Emergency</p>
-
-    <!-- Number -->
-    <div class="mt-4 text-2xl font-bold">999</div>
-
-    <!-- Badge -->
-    <span class="inline-block mt-2 px-3 py-1 text-xs bg-gray-100 rounded-full text-gray-700">
-      সর্বজনীন
-    </span>
-
-    <!-- Buttons -->
-    <div class="flex gap-3 mt-4">
-      <button onclick="copyNumber()" class="flex-1 border border-gray-300 rounded-lg py-2 font-semibold text-gray-600 hover:bg-gray-100">
-        Copy
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold flex items-center">
+        <!-- Clock Icon -->
+        <svg class="w-5 h-5 mr-2 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Call History
+      </h2>
+      <button id="clearBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+        Clear
       </button>
-      <a href="tel:999" class="flex-1 bg-green-500 text-white rounded-lg py-2 font-semibold hover:bg-green-600 text-center">
-        📞 Call
-      </a>
     </div>
-  </div>
 
-  <!-- Toast Message -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg">
-    Number copied: 999
+    <!-- Input Fields -->
+    <div class="space-y-3 mb-4">
+      <input
+        id="callTitle"
+        type="text"
+        placeholder="Enter Call Title"
+        class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <input
+        id="callNumber"
+        type="text"
+        placeholder="Enter Phone Number"
+        class="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
+      <button id="addBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold">
+        Add Call Entry
+      </button>
+    </div>
+
+    <!-- Call History List -->
+    <div id="callHistory" class="space-y-3"></div>
   </div>
 
   <script>
-    const heart = document.getElementById("heart");
-    const toast = document.getElementById("toast");
+    const callHistory = document.getElementById('callHistory');
+    const addBtn = document.getElementById('addBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const callTitleInput = document.getElementById('callTitle');
+    const callNumberInput = document.getElementById('callNumber');
 
-    // Heart toggle
-    heart.addEventListener("click", () => {
-      if (heart.textContent === "♡") {
-        heart.textContent = "❤️";
-        heart.classList.remove("text-gray-400");
-        heart.classList.add("text-red-500");
-      } else {
-        heart.textContent = "♡";
-        heart.classList.remove("text-red-500");
-        heart.classList.add("text-gray-400");
+    function getCurrentTime() {
+      const now = new Date();
+      return now.toLocaleTimeString('en-US');
+    }
+
+    function createCallEntryElement(title, number, time) {
+      const entry = document.createElement('div');
+      entry.className = 'bg-white p-3 rounded-lg shadow-sm cursor-pointer hover:bg-gray-50 transition';
+
+      entry.innerHTML = `
+        <p class="font-semibold text-sm">${title}</p>
+        <div class="flex justify-between text-sm text-gray-600">
+          <span class="number">${number}</span>
+          <span>${time}</span>
+        </div>
+      `;
+
+      // Add click listener to fill the input fields
+      entry.addEventListener('click', () => {
+        callTitleInput.value = title;
+        callNumberInput.value = number;
+      });
+
+      return entry;
+    }
+
+    function addCallEntry(title, number) {
+      const time = getCurrentTime();
+      const entryElement = createCallEntryElement(title, number, time);
+      callHistory.prepend(entryElement);
+    }
+
+    addBtn.addEventListener('click', () => {
+      const title = callTitleInput.value.trim();
+      const number = callNumberInput.value.trim();
+
+      if (!title || !number) {
+        alert('Please fill in both fields.');
+        return;
       }
+
+      addCallEntry(title, number);
+
+      // Clear input fields
+      callTitleInput.value = '';
+      callNumberInput.value = '';
     });
 
-    // Copy function with toast
-    function copyNumber() {
-      navigator.clipboard.writeText("999");
-      toast.classList.remove("hidden");
-      setTimeout(() => {
-        toast.classList.add("hidden");
-      }, 2000);
-    }
+    clearBtn.addEventListener('click', () => {
+      callHistory.innerHTML = '';
+    });
   </script>
-
 </body>
 </html>
