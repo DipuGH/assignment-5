@@ -1,4 +1,4 @@
-
+// Love Button...........................................
 let count = 0;
 const Hearts = document.querySelectorAll(".heart");
 const HeartCount = document.getElementById ("heart-count");
@@ -10,8 +10,7 @@ for (const Heart of Hearts) {
     })
 }
 
-// .........................................................................................
-
+// Copy Button.................................................
 function ToCopy(buttonId, textId){
     
     
@@ -51,7 +50,7 @@ const CopyCountBtns = document.querySelectorAll(".copy-count-btn");
     }
 
 
-// ...........................................................................................
+// Call Button ......................................
 
 const TotalCoin = document.getElementById("total-coin");
 const CallBtns = document.querySelectorAll(".call-btn");
@@ -107,5 +106,5 @@ document.querySelector(".clear-btn").addEventListener("click", function () {
   document.getElementById("history-list").innerHTML = "";
 });
 
-
+// End ..............................
 
